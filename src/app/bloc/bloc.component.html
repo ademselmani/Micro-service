@@ -1,0 +1,70 @@
+<head>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<div>
+    <h2>Liste des Blocs</h2>
+  
+    <!-- Formulaire de filtrage -->
+    <div>
+      <label for="nomBloc">Nom du Bloc:</label>
+      <input [(ngModel)]="nomBloc" id="nomBloc" placeholder="Nom du bloc" />
+  
+      <label for="capaciteBloc">Capacité:</label>
+      <input [(ngModel)]="capaciteBloc" id="capaciteBloc" placeholder="Capacité du bloc" />
+  
+      <button (click)="filterBlocs()">Filtrer</button>
+    </div>
+  
+    <!-- Affichage des blocs filtrés -->
+    <div *ngIf="isFiltered">
+      <h3>Liste des Foyers Filtrés :</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom du Foyer</th>
+     
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let foyer of blocs">
+            <th scope="row">{{ foyer.id }}</th>  <!-- Afficher l'ID -->
+            <td>{{ foyer }}</td>  
+           
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Affichage des blocs avant filtrage -->
+    <div *ngIf="!isFiltered">
+      <h3>Liste des Blocs :</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom du Bloc</th>
+            <th scope="col">Capacité</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bloc of blocs">
+            <th scope="row">{{ bloc.id }}</th>  <!-- Afficher l'ID -->
+            <td>{{ bloc.nomBloc }}</td>  <!-- Afficher le nom du bloc -->
+            <td>{{ bloc.capaciteBloc }}</td>  <!-- Afficher la capacité du bloc -->
+            <td>
+              <button (click)="updateBloc(bloc)">
+                <i class="fas fa-edit"></i> Mettre à jour
+              </button>
+              <button (click)="deleteBloc(bloc)">
+                <i class="fas fa-trash"></i> Supprimer
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
