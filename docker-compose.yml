@@ -1,0 +1,45 @@
+version: "3.0"
+
+services:
+  eureka:
+    build: ./eurekaMs
+    image: ademselmani/eureka:1.0
+    container_name: eureka
+    ports:
+      - 8761:8761
+    
+
+  apigateway:
+    build: ./ApiJob
+    image: ademselmani/apigateway:1.0
+    container_name: apigateway
+    ports:
+      - 8093:8093
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+
+  foyer:
+    build: ./MsFoyer
+    image: ademselmani/msfoyer:1.0
+    container_name: msfoyer
+    ports:
+      - 8089:8089 
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/msDB?createDatabaseIfNotExist=true
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+      - mysql
+    
+
+  mysql:
+    image: mysql:latest 
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msDB
+    
