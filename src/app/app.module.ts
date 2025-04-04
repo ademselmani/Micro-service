@@ -6,19 +6,20 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BlocComponent } from './bloc/bloc.component';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BlocUpdateComponent } from './bloc-update/bloc-update.component';
+
 @NgModule({
   declarations: [
     AppComponent,
-    BlocComponent
+    BlocComponent,
+    BlocUpdateComponent
     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
-    NgbModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

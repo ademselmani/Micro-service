@@ -1,16 +1,16 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { BlocComponent } from './bloc.component';
+// import { BlocUpdateComponent } from './bloc-update.component';
 
-// describe('BlocComponent', () => {
-//   let component: BlocComponent;
-//   let fixture: ComponentFixture<BlocComponent>;
+// describe('BlocUpdateComponent', () => {
+//   let component: BlocUpdateComponent;
+//   let fixture: ComponentFixture<BlocUpdateComponent>;
 
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
-//       declarations: [BlocComponent]
+//       declarations: [BlocUpdateComponent]
 //     });
-//     fixture = TestBed.createComponent(BlocComponent);
+//     fixture = TestBed.createComponent(BlocUpdateComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });
