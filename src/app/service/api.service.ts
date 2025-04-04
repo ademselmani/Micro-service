@@ -15,13 +15,13 @@ export class ApiService {
     return this.http.get(this.apiUrl);
   }
 
-//   getBlocById(blocId: number): Observable<any> {
-//     return this.http.get(`${this.apiUrl}/${blocId}`);
-//   }
+  getBlocById(blocId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${blocId}`);
+  }
   
-//   updateBloc(bloc: any): Observable<any> {
-//     return this.http.put(`${this.apiUrl}/${bloc.idBloc}`, bloc);  // Inclure l'ID du bloc dans l'URL
-//   }
+  updateBloc(bloc: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${bloc.idBloc}`, bloc);  // Inclure l'ID du bloc dans l'URL
+  }
   
  
 
