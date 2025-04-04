@@ -1,19 +1,19 @@
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpParams } from '@angular/common/http';
-// import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class ApiService {
-//   private apiUrl = 'http://localhost:8089/microService/bloc'; // L'URL de votre backend
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiService {
+  private apiUrl = 'http://localhost:8089/microService/bloc'; // L'URL de votre backend
 
-//   constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-//   // Méthode pour récupérer tous les blocs
-//   getAllBlocs(): Observable<any> {
-//     return this.http.get(this.apiUrl);
-//   }
+  // Méthode pour récupérer tous les blocs
+  getAllBlocs(): Observable<any> {
+    return this.http.get(this.apiUrl);
+  }
 
 //   getBlocById(blocId: number): Observable<any> {
 //     return this.http.get(`${this.apiUrl}/${blocId}`);
@@ -37,4 +37,4 @@
 //   addBloc(bloc: any): Observable<any> {
 //     return this.http.post(this.apiUrl, bloc);
 //   }
-// }
+}

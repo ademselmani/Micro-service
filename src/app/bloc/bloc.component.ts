@@ -1,31 +1,31 @@
-// import { Component, OnInit } from '@angular/core';
-// import { ApiService } from '../service/api.service';
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../service/api.service';
 
-// @Component({
-//   selector: 'app-bloc',
-//   templateUrl: './bloc.component.html',
-//   styleUrls: ['./bloc.component.css']
-// })
-// export class BlocComponent implements OnInit {
-//   blocs: any[] = [];
-//   nomBloc: string = '';
-//   capaciteBloc: string = '';
-//   isFiltered: boolean = false;
-//   isAdding: boolean = false; // Gérer l'affichage du formulaire d'ajout
-//   newBloc = { nomBloc: '', capaciteBloc: '' }; // Stocker les données du nouveau bloc
+@Component({
+  selector: 'app-bloc',
+  templateUrl: './bloc.component.html',
+  styleUrls: ['./bloc.component.css']
+})
+export class BlocComponent implements OnInit {
+  blocs: any[] = [];
+  nomBloc: string = '';
+  capaciteBloc: string = '';
+  isFiltered: boolean = false;
+  isAdding: boolean = false; // Gérer l'affichage du formulaire d'ajout
+  newBloc = { nomBloc: '', capaciteBloc: '' }; // Stocker les données du nouveau bloc
 
-//   constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) {}
 
-//   ngOnInit(): void {
-//     this.getAllBlocs();
-//   }
+  ngOnInit(): void {
+    this.getAllBlocs();
+  }
 
-//   // Récupérer tous les blocs
-//   getAllBlocs(): void {
-//     this.apiService.getAllBlocs().subscribe((data: any) => {
-//       this.blocs = data;
-//     });
-//   }
+  // Récupérer tous les blocs
+  getAllBlocs(): void {
+    this.apiService.getAllBlocs().subscribe((data: any) => {
+      this.blocs = data;
+    });
+  }
 
 //   // Filtrer les blocs selon les critères nomBloc et capaciteBloc
 //   filterBlocs(): void {
@@ -70,4 +70,4 @@
 //       }
 //     );
 //   }
-// }
+}
