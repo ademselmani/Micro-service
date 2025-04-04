@@ -6,7 +6,7 @@
     <h2>Liste des Blocs</h2>
 
 
-    <button class="btn btn-success mb-3" (click)="toggleAddForm()">Ajouter un bloc</button>
+    <button class="btn btn-success mb-3" style="margin-left: 2100px;" (click)="toggleAddForm()">Ajouter un bloc</button>
 
    
     <div *ngIf="isAdding" class="card p-3">
@@ -24,7 +24,7 @@
     </div>
 
 
-    <div>
+    <div style="background-color: white;">
       <label for="nomBloc">Nom du Bloc:</label>
       <input [(ngModel)]="nomBloc" id="nomBloc" placeholder="Nom du bloc" />
 
@@ -35,7 +35,7 @@
     </div>
 
   
-    <h3>Liste des Blocs :</h3>
+    <div class="table-container">
     <table class="table table-striped">
       <thead>
         <tr>
@@ -61,4 +61,5 @@
         </tr>
       </tbody>
     </table>
+</div> 
 </div> 
