@@ -27,16 +27,16 @@ export class BlocComponent implements OnInit {
     });
   }
 
-//   // Filtrer les blocs selon les critères nomBloc et capaciteBloc
-//   filterBlocs(): void {
-//     this.apiService.filterBlocs(this.nomBloc, this.capaciteBloc).subscribe((data) => {
-//       console.log('Données retournées après filtrage:', data);
-//       this.blocs = data;
-//       this.isFiltered = true;
-//     }, error => {
-//       console.error('Erreur lors du filtrage des blocs:', error);
-//     });
-//   }
+  // Filtrer les blocs selon les critères nomBloc et capaciteBloc
+  filterBlocs(): void {
+    this.apiService.filterBlocs(this.nomBloc, this.capaciteBloc).subscribe((data) => {
+      console.log('Données retournées après filtrage:', data);
+      this.blocs = data;
+      this.isFiltered = true;
+    }, error => {
+      console.error('Erreur lors du filtrage des blocs:', error);
+    });
+  }
 
 //   // Supprimer un bloc
 //   deleteBloc(blocId: number): void {
