@@ -23,18 +23,16 @@ export class ApiService {
     return this.http.put(`${this.apiUrl}/${bloc.idBloc}`, bloc);  // Inclure l'ID du bloc dans l'URL
   }
   
- 
-
-//   deleteBloc(blocId: number): Observable<any> {
-//     return this.http.delete(`${this.apiUrl}/${blocId}`);
-//   }
+  deleteBloc(blocId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${blocId}`);
+  }
   filterBlocs(nomBloc: string, capaciteBloc: string): Observable<any> {
     const params = new HttpParams()
       .set('nomBloc', nomBloc)
       .set('capaciteBloc', capaciteBloc);
     return this.http.get(`${this.apiUrl}/filter`, { params });
   }
-//   addBloc(bloc: any): Observable<any> {
-//     return this.http.post(this.apiUrl, bloc);
-//   }
+  addBloc(bloc: any): Observable<any> {
+    return this.http.post(this.apiUrl, bloc);
+  }
 }

@@ -38,36 +38,36 @@ export class BlocComponent implements OnInit {
     });
   }
 
-//   // Supprimer un bloc
-//   deleteBloc(blocId: number): void {
-//     this.apiService.deleteBloc(blocId).subscribe(
-//       (response) => {
-//         this.blocs = this.blocs.filter(bloc => bloc.idBloc !== blocId);
-//       },
-//       (error) => {
-//         console.error('Erreur lors de la suppression du bloc', error);
-//       }
-//     );
-//   }
+  // Supprimer un bloc
+  deleteBloc(blocId: number): void {
+    this.apiService.deleteBloc(blocId).subscribe(
+      (response) => {
+        this.blocs = this.blocs.filter(bloc => bloc.idBloc !== blocId);
+      },
+      (error) => {
+        console.error('Erreur lors de la suppression du bloc', error);
+      }
+    );
+  }
 
-//   // Afficher/Masquer le formulaire d'ajout
-//   toggleAddForm(): void {
-//     this.isAdding = !this.isAdding;
-//     if (!this.isAdding) {
-//       this.newBloc = { nomBloc: '', capaciteBloc: '' };
-//     }
-//   }
+  // Afficher/Masquer le formulaire d'ajout
+  toggleAddForm(): void {
+    this.isAdding = !this.isAdding;
+    if (!this.isAdding) {
+      this.newBloc = { nomBloc: '', capaciteBloc: '' };
+    }
+  }
 
-//   // Ajouter un nouveau bloc
-//   addBloc(): void {
-//     this.apiService.addBloc(this.newBloc).subscribe(
-//       (response) => {
-//         this.blocs.push(response); // Ajouter le bloc à la liste
-//         this.toggleAddForm(); // Masquer le formulaire après ajout
-//       },
-//       (error) => {
-//         console.error('Erreur lors de l\'ajout du bloc', error);
-//       }
-//     );
-//   }
+  // Ajouter un nouveau bloc
+  addBloc(): void {
+    this.apiService.addBloc(this.newBloc).subscribe(
+      (response) => {
+        this.blocs.push(response); // Ajouter le bloc à la liste
+        this.toggleAddForm(); // Masquer le formulaire après ajout
+      },
+      (error) => {
+        console.error('Erreur lors de l\'ajout du bloc', error);
+      }
+    );
+  }
 }
