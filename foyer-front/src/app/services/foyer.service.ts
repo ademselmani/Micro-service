@@ -16,7 +16,7 @@ export interface Foyerr {
   providedIn: 'root',
 })
 export class FoyerService {
-  private apiUrl = 'http://localhost:8089/microService/foyer'; // URL de ton backend
+  private apiUrl = 'http://localhost:8089/microService/foyer'; 
 
   constructor(private http: HttpClient) {}
 

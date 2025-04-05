@@ -7,57 +7,80 @@ import { FoyerService, Foyer, Foyerr } from '../../services/foyer.service';
 })
 export class FoyerListComponent implements OnInit {
   foyers: Foyer[] = [];
-  selectedFoyer: Foyer | null = null; // Stocke le foyer en cours d'édition
+  filteredFoyers: Foyer[] = [];
+  selectedFoyer: Foyer | null = null;
   showAddFoyerForm = false;
-  newFoyer: Foyerr = { nomFoyer: '', capaciteFoyer: 0 }; // Définir newFoyer ici
+  newFoyer: Foyerr = { nomFoyer: '', capaciteFoyer: 0 };
+  searchTerm: string = '';
+
+  // 🌙 Dark Mode State
+  isDarkMode: boolean = false;
 
   constructor(private foyerService: FoyerService) {}
 
   ngOnInit() {
     this.getFoyers();
+
+    // Restore dark mode from localStorage
+    const savedTheme = localStorage.getItem('darkMode');
+    this.isDarkMode = savedTheme === 'true';
+  }
+
+  // Toggle dark mode and persist preference
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    localStorage.setItem('darkMode', String(this.isDarkMode));
   }
 
   getFoyers() {
     this.foyerService.getFoyers().subscribe((data) => {
       this.foyers = data;
+      this.filteredFoyers = data;
     });
   }
 
+  filterFoyers() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      this.filteredFoyers = this.foyers;
+    } else {
+      this.filteredFoyers = this.foyers.filter((foyer) =>
+        foyer.nomFoyer.toLowerCase().includes(term)
+      );
+    }
+  }
+
   editFoyer(foyer: Foyer) {
-    this.selectedFoyer = { ...foyer }; // Cloner pour éviter les modifications directes
+    this.selectedFoyer = { ...foyer };
   }
 
   updateFoyer() {
     if (this.selectedFoyer) {
       this.foyerService.updateFoyer(this.selectedFoyer).subscribe(() => {
-        this.getFoyers(); // Rafraîchir la liste
-        this.selectedFoyer = null; // Réinitialiser
+        this.getFoyers();
+        this.selectedFoyer = null;
       });
     }
   }
 
   cancelEdit() {
-    this.selectedFoyer = null; // Masquer le formulaire
+    this.selectedFoyer = null;
   }
 
   deleteFoyer(idFoyer: number) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce foyer ?')) {
       this.foyerService.deleteFoyer(idFoyer).subscribe(() => {
-        // After deletion, refresh the list of foyers
         this.getFoyers();
       });
     }
   }
 
-
   addFoyer() {
     if (this.newFoyer.nomFoyer && this.newFoyer.capaciteFoyer) {
-      console.log('Adding new foyer:', this.newFoyer);
-      console.log('Foyer data:', this.newFoyer);
       this.foyerService.addFoyer(this.newFoyer).subscribe(() => {
         this.getFoyers();
-        this.showAddFoyerForm = false; 
-        this.newFoyer = { nomFoyer: '', capaciteFoyer: 0 }; 
+        this.showAddFoyerForm = false;
+        this.newFoyer = { nomFoyer: '', capaciteFoyer: 0 };
       });
     } else {
       alert('Veuillez remplir tous les champs!');
@@ -65,7 +88,7 @@ export class FoyerListComponent implements OnInit {
   }
 
   cancelAdd() {
-    this.showAddFoyerForm = false; 
-    this.newFoyer = { nomFoyer: '', capaciteFoyer: 0 }; 
+    this.showAddFoyerForm = false;
+    this.newFoyer = { nomFoyer: '', capaciteFoyer: 0 };
   }
 }
