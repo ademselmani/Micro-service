@@ -1,6 +1,6 @@
 # Foyer Management Platform
 
-A microservice-based web application for managing job applications and housing services (foyer).
+A microservice-based web application for housing services (foyer).
 
 ## 📁 Project Structure
 
