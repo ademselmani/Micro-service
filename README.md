@@ -1,53 +1,88 @@
-# Microservice Architecture Project
+# 🚀 Microservice Architecture Project
 
-## Project Structure
+
+
+## 🏗️ Project Structure
 
 The project is built using a microservice architecture with the following components:
 
-### 1. Eureka Service Discovery ![Eureka Icon](https://img.icons8.com/ios/50/000000/registration.png)
+### 1. 🔍 Eureka Service Discovery (eurekaMs)
 - A service registry that allows microservices to find and communicate with each other.
-- Port: 8761
+- Port: `8761`
 - Used for service discovery and registration.
 
-### 2. API Gateway ![API Gateway Icon](https://img.icons8.com/ios/50/000000/api.png)
+### 2. 🌉 API Gateway (ApiJob)
 - Acts as an entry point for all client requests.
-- Port: 8093
+- Port: `8093`
 - Routes traffic to appropriate microservices.
 - Registers with Eureka for service discovery.
 
-### 3. Bloc Service ![Bloc Service Icon](https://img.icons8.com/ios/50/000000/cogs.png)
+### 3. 🧩 Bloc Service (MsFoyer)
 - Business logic microservice.
-- Port: 8089
+- Port: `8089`
 - Connects to MySQL database.
 - Registers with Eureka for service discovery.
 
-### 4. MySQL Database ![MySQL Icon](https://img.icons8.com/ios/50/000000/mysql-logo.png)
+### 4. 💾 MySQL Database
 - Database for storing application data.
-- Port: 3306
-- Database name: msDB
+- Port: `3306`
+- Database name: `msDB`
 
-## Technologies Used
+## 🛠️ Technologies Used
 
-- **Spring Boot**: Framework for creating microservices
-- **Spring Cloud Netflix Eureka**: Service discovery
-- **Spring Cloud Gateway**: API Gateway implementation
-- **Docker**: Containerization platform
-- **MySQL**: Database
-- **Angular**: Frontend framework (running on port 4200)
+- **🍃 Spring Boot**: Framework for creating microservices
+- **☁️ Spring Cloud Netflix Eureka**: Service discovery
+- **🚪 Spring Cloud Gateway**: API Gateway implementation
+- **🐳 Docker**: Containerization platform
+- **🗄️ MySQL**: Database
+- **🅰️ Angular**: Frontend framework (running on port 4200)
 
-## How to Run the Project
+## ⚙️ System Architecture
 
-### Cloning the Repository
+```
+┌─────────────────┐     ┌─────────────────┐
+│                 │     │                 │
+│  Frontend App   │────▶│   API Gateway   │
+│   (Angular)     │     │   (Port 8093)   │
+│                 │     │                 │
+└─────────────────┘     └────────┬────────┘
+                                 │
+                                 ▼
+                       ┌─────────────────┐
+                       │                 │
+                       │ Eureka Registry │
+                       │   (Port 8761)   │
+                       │                 │
+                       └────────┬────────┘
+                                │
+                     ┌──────────┴──────────┐
+                     │                     │
+          ┌──────────▼─────────┐  ┌────────▼────────┐
+          │                    │  │                 │
+          │    Bloc Service    │  │  Other Services │
+          │    (Port 8089)     │  │                 │
+          │                    │  │                 │
+          └──────────┬─────────┘  └─────────────────┘
+                     │
+                     ▼
+          ┌─────────────────────┐
+          │                     │
+          │  MySQL Database     │
+          │    (Port 3306)      │
+          │                     │
+          └─────────────────────┘
+```
+
+## 🚦 How to Run the Project
+
+### 📥 Cloning the Repository
 
 ```bash
 git clone -b zeinebmaatallii https://github.com/ademselmani/Micro-service.git
+cd Micro-service
+```
 
-Run docker-compose up to start all services
-Access the front-end at http://localhost:4200
-
-
-
-### Running with Docker Compose
+### 🐳 Running with Docker Compose
 
 1. Make sure Docker is installed on your system
 2. Run the following command to start all services:
@@ -57,41 +92,60 @@ docker-compose up -d
 ```
 
 This will start:
-- Eureka Service on port 8761
-- API Gateway on port 8093
-- Bloc Service on port 8089
-- MySQL on port 3306
+- 🔍 Eureka Service on port `8761`
+- 🌉 API Gateway on port `8093`
+- 🧩 Bloc Service on port `8089`
+- 💾 MySQL on port `3306`
 
-### Accessing Services
+### 🌐 Accessing Services
 
 - **Eureka Dashboard**: http://localhost:8761
 - **API Gateway**: http://localhost:8093
 - **Frontend Application**: http://localhost:4200
 
-## Component Details
+## 🔍 Component Details
 
-### Eureka Service
+### 🔍 Eureka Service
 Eureka provides service discovery allowing microservices to find and communicate with each other without hardcoding host and port. It serves as a registry where all microservices register themselves.
 
-### API Gateway
+### 🌉 API Gateway
 The API Gateway is the entry point for all client requests. It routes requests to the appropriate microservice based on the path. It also provides cross-cutting concerns like security, monitoring, and resilience.
 
 Routes configured:
-
+- `/candidats/**` → http://localhost:8080
+- `/jobs/**` → http://localhost:8081
 - `/microService/**` → Service "MsFoyer" (load balanced)
 
-### Bloc Service
+### 🧩 Bloc Service
 The Bloc Service (MsFoyer) contains the business logic of the application and connects to the MySQL database. It registers with Eureka to be discoverable by other services.
 
-### Frontend Application
+### 🅰️ Frontend Application
 The Angular frontend application runs on port 4200 and communicates with the backend services through the API Gateway.
 
-## Docker Compose Configuration
+## 🐳 Docker Compose Configuration
 The docker-compose.yml file defines and configures all the services:
 - Sets up networking between containers
 - Maps ports to host machine
 - Defines environment variables for service configuration
 - Manages dependencies between services
 
-## Author
-- Zeineb Maatalli
+## 📝 API Endpoints
+
+| Service | Endpoint | Description |
+|---------|----------|-------------|
+| API Gateway | `/candidats/**` | Candidate management endpoints |
+| API Gateway | `/jobs/**` | Job management endpoints |
+| API Gateway | `/microService/**` | Bloc service endpoints |
+| Eureka | `/eureka/apps` | List of registered services |
+
+## 🔄 Workflow
+
+1. The client sends requests to the Angular frontend
+2. Frontend communicates with the API Gateway
+3. API Gateway routes requests to appropriate microservices
+4. Microservices process requests and return responses
+5. Responses flow back through the API Gateway to the frontend
+
+
+## 👤 Author
+- **Zeineb Maatalli**
