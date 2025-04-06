@@ -112,8 +112,6 @@ Eureka provides service discovery allowing microservices to find and communicate
 The API Gateway is the entry point for all client requests. It routes requests to the appropriate microservice based on the path. It also provides cross-cutting concerns like security, monitoring, and resilience.
 
 Routes configured:
-- `/candidats/**` → http://localhost:8080
-- `/jobs/**` → http://localhost:8081
 - `/microService/**` → Service "MsFoyer" (load balanced)
 
 ### 🧩 Bloc Service
@@ -133,8 +131,6 @@ The docker-compose.yml file defines and configures all the services:
 
 | Service | Endpoint | Description |
 |---------|----------|-------------|
-| API Gateway | `/candidats/**` | Candidate management endpoints |
-| API Gateway | `/jobs/**` | Job management endpoints |
 | API Gateway | `/microService/**` | Bloc service endpoints |
 | Eureka | `/eureka/apps` | List of registered services |
 
