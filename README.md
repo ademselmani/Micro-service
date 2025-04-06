@@ -26,7 +26,7 @@ The project is built using a microservice architecture with the following compon
 ### 4. 💾 MySQL Database
 - Database for storing application data.
 - Port: `3306`
-- Database name: `msDB`
+- Database name: `bloc`
 
 ## 🛠️ Technologies Used
 
