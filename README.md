@@ -1,29 +1,27 @@
 # Microservice Architecture Project
 
-
-
 ## Project Structure
 
 The project is built using a microservice architecture with the following components:
 
-### 1. Eureka Service Discovery (eurekaMs)
+### 1. Eureka Service Discovery ![Eureka Icon](https://img.icons8.com/ios/50/000000/registration.png)
 - A service registry that allows microservices to find and communicate with each other.
 - Port: 8761
 - Used for service discovery and registration.
 
-### 2. API Gateway (ApiJob)
+### 2. API Gateway ![API Gateway Icon](https://img.icons8.com/ios/50/000000/api.png)
 - Acts as an entry point for all client requests.
 - Port: 8093
 - Routes traffic to appropriate microservices.
 - Registers with Eureka for service discovery.
 
-### 3. Bloc Service (MsFoyer)
+### 3. Bloc Service ![Bloc Service Icon](https://img.icons8.com/ios/50/000000/cogs.png)
 - Business logic microservice.
 - Port: 8089
 - Connects to MySQL database.
 - Registers with Eureka for service discovery.
 
-### 4. MySQL Database
+### 4. MySQL Database ![MySQL Icon](https://img.icons8.com/ios/50/000000/mysql-logo.png)
 - Database for storing application data.
 - Port: 3306
 - Database name: msDB
@@ -43,8 +41,11 @@ The project is built using a microservice architecture with the following compon
 
 ```bash
 git clone -b zeinebmaatallii https://github.com/ademselmani/Micro-service.git
-cd Micro-service
-```
+
+Run docker-compose up to start all services
+Access the front-end at http://localhost:4200
+
+
 
 ### Running with Docker Compose
 
