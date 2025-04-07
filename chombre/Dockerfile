@@ -21,8 +21,14 @@ WORKDIR /app
 # Copy the built JAR from the builder stage
 COPY --from=builder /app/target/*.jar app.jar
 
-# Expose the application's port (updated to 8089 to match the service's port in Docker Compose)
+# Expose the application's port
 EXPOSE 8089
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Create directory for logs
+RUN mkdir -p /app/logs
+
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# Run the application with docker profile
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=docker", "app.jar"]
