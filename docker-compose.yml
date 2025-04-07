@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server 
+      dockerfile: Dockerfile
+    image: benhadjyahiamehdi/eureka:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_REGISTER-WITH-EUREKA=false
+      - EUREKA_CLIENT_FETCH-REGISTRY=false
+    networks:
+      - microservices-net
+
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=universites
+      - MYSQL_ROOT_HOST=%
+    command: 
+      - --default-authentication-plugin=mysql_native_password
+      - --bind-address=0.0.0.0
+      - --skip-name-resolve
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -uroot -proot --silent"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+    networks:
+      - microservices-net
+    volumes:
+      - db_mysql:/var/lib/mysql
+
+  phpmyadmin:
+    container_name: ms_phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    ports:
+      - "8086:80"
+    networks:
+      - microservices-net
+
+  microservice:
+    build:
+      context: ./microservice
+      dockerfile: Dockerfile
+    image: benhadjyahiamehdi/microservice
+    container_name: microservice
+    ports:
+      - "8079:8079"
+    depends_on:
+      db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/universites?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT=30000
+      - SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=5
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_REGISTER-WITH-EUREKA=true
+      - EUREKA_CLIENT_FETCH-REGISTRY=true
+      - EUREKA_CLIENT_INITIAL-INSTANCE-INFO-REPLICATION-INTERVAL=5
+      - EUREKA_INSTANCE_LEASE-RENEWAL-INTERVAL-IN-SECONDS=5
+      - EUREKA_INSTANCE_LEASE-EXPIRATION-DURATION-IN-SECONDS=10
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8079/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  API-gateway:
+    build:
+      context: ./API-gateway
+      dockerfile: Dockerfile
+    image: benhadjyahiamehdi/api5sae3
+    container_name: API-gateway
+    ports:
+      - "8090:8090"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      microservice:
+        condition: service_healthy
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_REGISTER-WITH-EUREKA=true
+      - EUREKA_CLIENT_FETCH-REGISTRY=true
+    networks:
+      - microservices-net
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  db_mysql:
