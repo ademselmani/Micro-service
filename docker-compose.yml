@@ -14,12 +14,6 @@ services:
       - EUREKA_SERVER_ENABLE_SELF_PRESERVATION=false
     networks:
       - my_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
     volumes:
       - discovery-logs:/app/logs
     restart: unless-stopped
@@ -32,22 +26,17 @@ services:
     ports:
       - "8078:8078"
     depends_on:
-      discovery:
-        condition: service_healthy
+      - discovery
+      - chombre
     environment:
       - SPRING_APPLICATION_NAME=gateway-service
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
       - SERVER_PORT=8078
-      - SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED=true
-      - SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_LOWER_CASE_SERVICE_ID=true
+      - SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED=false
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY=DEBUG
+      - LOGGING_LEVEL_REACTOR_NETTY=DEBUG
     networks:
       - my_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8078/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
     volumes:
       - gateway-logs:/app/logs
     restart: unless-stopped
@@ -57,11 +46,11 @@ services:
       context: ./chombre
       dockerfile: Dockerfile
     container_name: chombre_container
+    hostname: chombre
     ports:
       - "8089:8089"
     depends_on:
-      discovery:
-        condition: service_healthy
+      - discovery
     environment:
       - SPRING_APPLICATION_NAME=chombre-service
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
@@ -74,12 +63,6 @@ services:
       - SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS=true
     networks:
       - my_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8089/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
     volumes:
       - chombre-logs:/app/logs
     restart: unless-stopped
