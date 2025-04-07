@@ -17,6 +17,11 @@ services:
     volumes:
       - discovery-logs:/app/logs
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   gateway:
     build:
@@ -26,8 +31,10 @@ services:
     ports:
       - "8078:8078"
     depends_on:
-      - discovery
-      - chombre
+      discovery:
+        condition: service_healthy
+      chombre:
+        condition: service_started
     environment:
       - SPRING_APPLICATION_NAME=gateway-service
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
@@ -40,6 +47,11 @@ services:
     volumes:
       - gateway-logs:/app/logs
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8078/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   chombre:
     build:
@@ -48,14 +60,15 @@ services:
     container_name: chombre_container
     hostname: chombre
     ports:
-      - "8089:8089"
+      - "8090:8090"
     depends_on:
-      - discovery
+      discovery:
+        condition: service_healthy
     environment:
       - SPRING_APPLICATION_NAME=chombre-service
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
-      - SERVER_PORT=8089
-      - SPRING_DATASOURCE_URL=jdbc:h2:mem:chombredb
+      - SERVER_PORT=8090
+      - SPRING_DATASOURCE_URL=jdbc:h2:file:/app/data/chombre_db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
       - SPRING_DATASOURCE_DRIVERCLASSNAME=org.h2.Driver
       - SPRING_DATASOURCE_USERNAME=sa
       - SPRING_DATASOURCE_PASSWORD=
@@ -65,6 +78,30 @@ services:
       - my_network
     volumes:
       - chombre-logs:/app/logs
+      - chombre-data:/app/data
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./front/bing-travel-clone
+      dockerfile: Dockerfile
+    container_name: frontend_container
+    ports:
+      - "3000:3000"
+    depends_on:
+      gateway:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://gateway:8078/api
+    networks:
+      - my_network
     restart: unless-stopped
 
 networks:
@@ -75,3 +112,4 @@ volumes:
   discovery-logs:
   gateway-logs:
   chombre-logs:
+  chombre-data:
