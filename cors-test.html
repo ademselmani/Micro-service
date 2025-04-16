@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>CORS Test</h1>
+    <p>Click the button below to test if CORS is properly configured for the chombre API.</p>
+    
+    <div>
+        <button id="testOptionsButton">Test OPTIONS Preflight</button>
+        <button id="testGetButton">Test GET Request</button>
+    </div>
+    
+    <pre id="result">Results will appear here...</pre>
+
+    <script>
+        document.getElementById('testOptionsButton').addEventListener('click', async () => {
+            const resultElem = document.getElementById('result');
+            resultElem.textContent = 'Testing CORS OPTIONS preflight...';
+            
+            try {
+                // Create an AbortController to handle timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                
+                // Make a manual OPTIONS request
+                const response = await fetch('http://localhost:8091/rating/average/1', {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': 'http://localhost:5000',
+                        'Access-Control-Request-Method': 'GET',
+                        'Access-Control-Request-Headers': 'Content-Type,X-Requested-With'
+                    },
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);    
+                
+                // Display all headers
+                let headersText = '';
+                response.headers.forEach((value, key) => {
+                    headersText += `${key}: ${value}\n`;
+                });
+                
+                resultElem.textContent = `OPTIONS Response (${response.status} ${response.statusText}):\n\nHeaders:\n${headersText}`;
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    resultElem.textContent = 'Request timed out after 5 seconds. This may indicate a CORS issue.';
+                } else {
+                    resultElem.textContent = 'CORS Error: ' + error.message;
+                }
+            }
+        });
+        
+        document.getElementById('testGetButton').addEventListener('click', async () => {
+            const resultElem = document.getElementById('result');
+            resultElem.textContent = 'Testing CORS GET request...';
+            
+            try {
+                // Create an AbortController to handle timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                
+                const response = await fetch('http://localhost:8091/rating/average/1', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                // Display all headers
+                let headersText = '';
+                response.headers.forEach((value, key) => {
+                    headersText += `${key}: ${value}\n`;
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultElem.textContent = `GET Response (${response.status} ${response.statusText}):\n\nHeaders:\n${headersText}\n\nData:\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultElem.textContent = `GET Response Failed (${response.status} ${response.statusText}):\n\nHeaders:\n${headersText}`;
+                }
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    resultElem.textContent = 'Request timed out after 5 seconds. This may indicate a CORS issue.';
+                } else {
+                    resultElem.textContent = 'CORS Error: ' + error.message;
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
